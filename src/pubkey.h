@@ -1,5 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
+<<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+=======
+// Copyright (c) 2009-2016 The Bitcoin Core developers
+>>>>>>> Specify ECDSA constant sizes as constants
 // Copyright (c) 2017 The Zcash developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -14,6 +18,21 @@
 #include <stdexcept>
 #include <vector>
 
+<<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
+=======
+/**
+ * secp256k1:
+ */
+const unsigned int PUBLIC_KEY_SIZE             = 65;
+const unsigned int COMPRESSED_PUBLIC_KEY_SIZE  = 33;
+const unsigned int SIGNATURE_SIZE              = 72;
+const unsigned int COMPACT_SIGNATURE_SIZE      = 65;
+/**
+ * see www.keylength.com
+ * script supports up to 75 for single byte push
+ */
+
+>>>>>>> Specify ECDSA constant sizes as constants
 const unsigned int BIP32_EXTKEY_SIZE = 74;
 
 /** A reference to a CKey: the Hash160 of its serialized public key */
