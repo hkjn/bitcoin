@@ -18,9 +18,12 @@
 #include <stdexcept>
 #include <vector>
 
+<<<<<<< a3a712ba9c2f94f4ec8b3a3a96a99a26cc22cf1a
 <<<<<<< 1d7973ca32f02302de23e125a17dd8ad607b65a9
 <<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
 =======
+=======
+>>>>>>> Specify ECDSA constant sizes as constants
 /**
  * secp256k1:
  */
@@ -33,9 +36,12 @@ const unsigned int COMPACT_SIGNATURE_SIZE      = 65;
  * script supports up to 75 for single byte push
  */
 
+<<<<<<< a3a712ba9c2f94f4ec8b3a3a96a99a26cc22cf1a
 >>>>>>> Specify ECDSA constant sizes as constants
 =======
 >>>>>>> Scope the ECDSA constant sizes to CPubKey / CKey classes
+=======
+>>>>>>> Specify ECDSA constant sizes as constants
 const unsigned int BIP32_EXTKEY_SIZE = 74;
 
 /** A reference to a CKey: the Hash160 of its serialized public key */
