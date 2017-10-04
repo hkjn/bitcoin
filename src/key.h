@@ -1,9 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-<<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
 // Copyright (c) 2009-2017 The Bitcoin Core developers
-=======
-// Copyright (c) 2009-2016 The Bitcoin Core developers
->>>>>>> Specify ECDSA constant sizes as constants
 // Copyright (c) 2017 The Zcash developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -21,8 +17,6 @@
 
 
 /**
-<<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
-=======
  * secp256k1:
  */
 const unsigned int PRIVATE_KEY_SIZE            = 279;
@@ -33,7 +27,6 @@ const unsigned int COMPRESSED_PRIVATE_KEY_SIZE = 214;
  */
 
 /**
->>>>>>> Specify ECDSA constant sizes as constants
  * secure_allocator is defined in allocators.h
  * CPrivKey is a serialized private key, with all parameters included
  * (PRIVATE_KEY_SIZE bytes)

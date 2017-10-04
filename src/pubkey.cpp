@@ -251,6 +251,7 @@ void CExtPubKey::Encode(unsigned char code[BIP32_EXTKEY_SIZE]) const {
     code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
     code[7] = (nChild >>  8) & 0xFF; code[8] = (nChild >>  0) & 0xFF;
     memcpy(code+9, chaincode.begin(), 32);
+<<<<<<< 1d7973ca32f02302de23e125a17dd8ad607b65a9
 <<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
     assert(pubkey.size() == CPubKey::COMPRESSED_PUBLIC_KEY_SIZE);
     memcpy(code+41, pubkey.begin(), CPubKey::COMPRESSED_PUBLIC_KEY_SIZE);
@@ -258,6 +259,10 @@ void CExtPubKey::Encode(unsigned char code[BIP32_EXTKEY_SIZE]) const {
     assert(pubkey.size() == COMPRESSED_PUBLIC_KEY_SIZE);
     memcpy(code+41, pubkey.begin(), COMPRESSED_PUBLIC_KEY_SIZE);
 >>>>>>> Specify ECDSA constant sizes as constants
+=======
+    assert(pubkey.size() == CPubKey::COMPRESSED_PUBLIC_KEY_SIZE);
+    memcpy(code+41, pubkey.begin(), CPubKey::COMPRESSED_PUBLIC_KEY_SIZE);
+>>>>>>> Scope the ECDSA constant sizes to CPubKey / CKey classes
 }
 
 void CExtPubKey::Decode(const unsigned char code[BIP32_EXTKEY_SIZE]) {

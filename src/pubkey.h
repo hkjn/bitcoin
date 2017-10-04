@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <vector>
 
+<<<<<<< 1d7973ca32f02302de23e125a17dd8ad607b65a9
 <<<<<<< 32141415f55fa6f0e9c8a818ed5c5bbecf01de20
 =======
 /**
@@ -33,6 +34,8 @@ const unsigned int COMPACT_SIGNATURE_SIZE      = 65;
  */
 
 >>>>>>> Specify ECDSA constant sizes as constants
+=======
+>>>>>>> Scope the ECDSA constant sizes to CPubKey / CKey classes
 const unsigned int BIP32_EXTKEY_SIZE = 74;
 
 /** A reference to a CKey: the Hash160 of its serialized public key */
