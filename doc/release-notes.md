@@ -63,6 +63,10 @@ RPC changes
 
 - The `fundrawtransaction` rpc will reject the previously deprecated `reserveChangeKey` option.
 
+- `dumpwallet` now includes hex-encoded scripts from the wallet in the dumpfile, and
+  `importwallet` now imports these scripts, but corresponding addresses may not be added
+  correctly or a manual rescan may be required to find relevant transactions.
+
 Credits
 =======
 
