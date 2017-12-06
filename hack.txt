@@ -1,0 +1,2 @@
+Try out following to use assembly optimizations for ARM:
+./configure --with-asm=arm --enable-experimental
