@@ -1286,6 +1286,9 @@ if test x$need_bundled_univalue = xyes; then
   AC_CONFIG_SUBDIRS([src/univalue])
 fi
 
+dnl
+dnl TODO(hkjn): Try passing through --with-asm=arm --enable-experimental if on ARM, to make use of assembly optimizations.
+dnl
 ac_configure_args="${ac_configure_args} --disable-shared --with-pic --with-bignum=no --enable-module-recovery --disable-jni"
 AC_CONFIG_SUBDIRS([src/secp256k1])
 
