@@ -1,7 +1,7 @@
 FROM hkjn/arch
 
 RUN pacman -Syyu --noconfirm && \
-    pacman -S --noconfirm git base-devel boost libevent
+    pacman -S --noconfirm git base-devel boost libevent python
 
 # Run with:
 # docker run --rm -it -v $(pwd):/usr/local/src/bitcoin -w /usr/local/src/bitcoin bitcoin-dev sh
