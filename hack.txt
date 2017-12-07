@@ -1,2 +1,16 @@
+# ARM optimizations
+
 Try out following to use assembly optimizations for ARM:
 ./configure --with-asm=arm --enable-experimental
+
+# Performance dashboard
+
+Add support for monitoring memory usage and other performance, via #11822:
+
+19:06 < sipa> that would be nice to have
+19:06 < sipa> heap usage during reindex graphs
+19:07 < sipa> as well as performance graphs
+
+Maybe inspired by https://speed.z.cash, uses https://github.com/tobami/codespeed/ ?
+
+Also include IBD speed?
