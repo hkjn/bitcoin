@@ -39,6 +39,7 @@ class TestNode():
     be dispatched to the RPC connection."""
 
     def __init__(self, i, dirname, extra_args, rpchost, timewait, binary, stderr, mocktime, coverage_dir):
+        print('FIXMEH: creating TestNode #{}'.format(i))
         self.index = i
         self.datadir = os.path.join(dirname, "node" + str(i))
         self.rpchost = rpchost
@@ -71,6 +72,8 @@ class TestNode():
     def __getattr__(self, name):
         """Dispatches any unrecognised messages to the RPC connection."""
         assert self.rpc_connected and self.rpc is not None, "Error: no RPC connection"
+        print('''FIXMEH: node #{} is attempting to fetch attribute {} from
+                self.rpc'''.format(self.index, name))
         return getattr(self.rpc, name)
 
     def start(self, extra_args=None, stderr=None):
@@ -90,7 +93,28 @@ class TestNode():
         for _ in range(poll_per_s * self.rpc_timeout):
             assert self.process.poll() is None, "bitcoind exited with status %i during initialization" % self.process.returncode
             try:
-                self.rpc = get_rpc_proxy(rpc_url(self.datadir, self.index, self.rpchost), self.index, timeout=self.rpc_timeout, coveragedir=self.coverage_dir)
+                # import pdb; pdb.set_trace()
+                rpcurl=rpc_url(self.datadir, self.index, self.rpchost)
+                print('''FIXMEH: node #{} creating
+                        self.rpc=AuthServiceProxyWrapper({},
+                        ..)'''.format(self.index, rpcurl))
+                # call below uses rpcurl, which looks in
+                # testdir/nodeN/bitcoin.conf for 'rpcuser/rpcpassword', then
+                # testdir/nodeN/.cookie for value like
+                # __cookie__:66ea18120d8ca86e131d45c6364794e6fd6df7a02ff3e8627e32186b7eebae82 
+                self.rpc = get_rpc_proxy(rpcurl, self.index, timeout=self.rpc_timeout, coveragedir=self.coverage_dir)
+                # call like below ends up in self.rpc (AuthServiceProxyWrapper),
+                # which uses getattr on self.auth_service_proxy_instance, which
+                # is AuthServiceProxy, in
+                # test/functional/test_framework/authproxy.py, which in turn
+                # *also* has a hacky overridden __getattr__, which creates
+                # *another* AuthServiceProxy instance, that has a HTTPConnection
+                # to the node. This all leads to self.rpc.getblockcount()
+                # returning 200 in this case, which is used to set
+                # self.rpc_connected.
+                # 
+                # 
+
                 self.rpc.getblockcount()
                 # If the call to getblockcount() succeeds then the RPC connection is up
                 self.rpc_connected = True

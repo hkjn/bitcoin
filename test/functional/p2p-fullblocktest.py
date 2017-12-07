@@ -69,6 +69,7 @@ class FullBlockTest(ComparisonTestFramework):
         self.test = TestManager(self, self.options.tmpdir)
         self.test.add_all_connections(self.nodes)
         NetworkThread().start() # Start up network handling in another thread
+        print('FIXMEH: starting p2p-fullblocktest run()..')
         self.test.run()
 
     def add_transactions_to_block(self, block, tx_list):
