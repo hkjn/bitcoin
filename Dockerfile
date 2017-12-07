@@ -1,6 +1,6 @@
 FROM hkjn/arch
 
-RUN pacman -Syyu --noconfirm && \
+RUN pacman -Syy --noconfirm && \
     pacman -S --noconfirm git base-devel boost libevent python
 
 # Run with:
