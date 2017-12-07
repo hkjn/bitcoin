@@ -17,3 +17,9 @@ Also include IBD speed?
 
 20:08 < jonasschnelli> hkjn0: that would be nice. sdaftuar once mentioned that he has something like a network bypasser...
 20:09 < jonasschnelli> Because you want to measure IBD without measuring the network stack
+
+# Better testnet
+
+Discussion to replace current testnet3 with a testnet4 (possibly running both for some time)
+
+Issues with net3 is tons of blocks (1M+), very low difficulty

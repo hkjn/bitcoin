@@ -1,7 +1,14 @@
 FROM hkjn/arch
 
-RUN pacman -Syy --noconfirm && \
-    pacman -S --noconfirm git base-devel boost libevent python
+COPY gpg.conf /etc/pacman.d/gnupg/
+
+# TODO: Move this workaround of stale keys into hkjn/arch base image.
+RUN pacman-key --init && \
+    pacman-key --populate archlinux && \
+    pacman-key --refresh-keys
+ 
+RUN pacman -Syyu --noconfirm
+RUN pacman -S --noconfirm git base-devel boost libevent python
 
 # Run with:
 # docker run --rm -it -v $(pwd):/usr/local/src/bitcoin -w /usr/local/src/bitcoin bitcoin-dev sh
