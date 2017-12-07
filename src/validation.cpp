@@ -4467,6 +4467,7 @@ bool DumpMempool(void)
     int64_t mid = GetTimeMicros();
 
     try {
+        LogPrintf("FIXMEH: attempting to open data dir/mempool.dat.new for wb..\n");
         FILE* filestr = fsbridge::fopen(GetDataDir() / "mempool.dat.new", "wb");
         if (!filestr) {
             return false;
@@ -4488,6 +4489,7 @@ bool DumpMempool(void)
         file << mapDeltas;
         FileCommit(file.Get());
         file.fclose();
+	LogPrintf("FIXMEH: about to rename mempool.dat.new to mempool.dat..\n");
         RenameOver(GetDataDir() / "mempool.dat.new", GetDataDir() / "mempool.dat");
         int64_t last = GetTimeMicros();
         LogPrintf("Dumped mempool: %gs to copy, %gs to dump\n", (mid-start)*MICRO, (last-mid)*MICRO);
