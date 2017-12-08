@@ -3440,7 +3440,8 @@ UniValue rescanblockchain(const JSONRPCRequest& request)
             );
     }
 
-    if (pwallet->IsScanning()) {
+    WalletRescanReserver reserver(pwallet);
+    if (!reserver.reserve()) {
         throw JSONRPCError(RPC_WALLET_ERROR, "Wallet is currently rescanning. Abort existing rescan or wait.");
     }
 
