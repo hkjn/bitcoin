@@ -23,3 +23,36 @@ Also include IBD speed?
 Discussion to replace current testnet3 with a testnet4 (possibly running both for some time)
 
 Issues with net3 is tons of blocks (1M+), very low difficulty
+
+# Codewalks
+
+03:45 < valval> is there any form of source code walkthrough?
+03:45 < valval> like where i can start off to understand the structure of the codes
+03:45 < valval> http://embedded-design-vic.blogspot.sg/2017/07/bitcoin-core-tutorial-and-source-code.html is this a good source?
+03:56 < sipa> that looks like a very small random dubset of function
+03:57 < sipa> i don't think there is much of a guide, and certainly no up to date one
+
+# License review
+
+Via discussions about possibly including new lib with dual LGPL + GPL licenses, seems like libzmq (optional dependency?) already is included with LGPL:
+
+20:01 < aj> libzmq is lgpl isn't it?
+20:01 < wumpus> yes
+20:01 < wumpus> aj: no
+20:01 < sipa> more in the context of rolling hashes
+20:01 < wumpus> aj: oh, you're actually right
+20:01 < wumpus> aj: wtf, I never knew
+20:01 < wumpus> aj: however zmq is optional
+20:02 < BlueMatt> that sucks...our release binaries have lgpl crap in them and we dont have an easy way to get a bitcoind that is linked to everything but zmq?
+20:02 < aj> the release binaries have zmq now?
+20:02  * BlueMatt wonders if some altcoins are violating that license
+20:02 < BlueMatt> almost certainly are
+20:03 < achow101> releases have zmq and have had them for a while now
+20:05 < wumpus> --disable-zmq
+
+# RPC method naming improvements
+
+In #8170, gettransaction and getrawtransaction RPC methods were split up from gettransaction, but the latter might be better named
+getwallettransaction. Comments by laanwj on unsuccessfully proposed change https://github.com/bitcoin/bitcoin/pull/11797#issuecomment-350468305
+mentions several other misnamed methods, so a possible proposal to rename all methods could introduce new names, gradually deprecate and finally
+remove old names several versions later.
