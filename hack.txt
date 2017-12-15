@@ -1,3 +1,9 @@
+# autoconf confusion
+
+The confdefs.h and conftest.{cpp,err} files seem to be created during
+./configure call (removed afterward?), but it's confusing when those
+untracked files show up.. add to .gitignore?
+
 # ARM optimizations
 
 Try out following to use assembly optimizations for ARM:
