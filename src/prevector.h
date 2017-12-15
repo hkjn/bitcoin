@@ -179,7 +179,11 @@ private:
                 assert(_union.indirect);
                 _union.capacity = new_capacity;
             } else {
+		// LogPrintf("FIXMEH: allocating memory for changed capacity in prevector.h..\n")
                 char* new_indirect = static_cast<char*>(malloc(((size_t)sizeof(T)) * new_capacity));
+                // FIXMEH: Following assert fails despite arbitrarily high timeout
+		// in p2p-fullblocktest.py. Presumably amount of memory is not
+		// sufficient?
                 assert(new_indirect);
                 T* src = direct_ptr(0);
                 T* dst = reinterpret_cast<T*>(new_indirect);
