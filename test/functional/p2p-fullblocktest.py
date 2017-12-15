@@ -1256,7 +1256,7 @@ class FullBlockTest(ComparisonTestFramework):
             # 570 crashes in 14m42s
             # 588 crashes in 15m21s
             # 688 crashes in 16m59s
-            # can try compared with --with-asm=arm --enable-experimental
+            # could try compared with --with-asm=arm --enable-experimental
             # (assembly optimizations for ARM enabled).
             test1 = TestInstance(sync_every_block=False)
             spend=out[32]

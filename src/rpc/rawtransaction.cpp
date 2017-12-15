@@ -155,14 +155,12 @@ UniValue getrawtransaction(const JSONRPCRequest& request)
 
     if (!request.params[2].isNull()) {
         uint256 blockhash = ParseHashV(request.params[2], "parameter 3");
-        if (!blockhash.IsNull()) {
-            BlockMap::iterator it = mapBlockIndex.find(blockhash);
-            if (it == mapBlockIndex.end()) {
-                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block hash not found");
-            }
-            blockindex = it->second;
-            in_active_chain = chainActive.Contains(blockindex);
+        BlockMap::iterator it = mapBlockIndex.find(blockhash);
+        if (it == mapBlockIndex.end()) {
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block hash not found");
         }
+        blockindex = it->second;
+        in_active_chain = chainActive.Contains(blockindex);
     }
 
     CTransactionRef tx;
@@ -351,7 +349,7 @@ UniValue createrawtransaction(const JSONRPCRequest& request)
             + HelpExampleRpc("createrawtransaction", "\"[{\\\"txid\\\":\\\"myid\\\",\\\"vout\\\":0}]\", \"{\\\"data\\\":\\\"00010203\\\"}\"")
         );
 
-    RPCTypeCheck(request.params, {UniValue::VARR, UniValue::VOBJ, UniValue::VNUM}, true);
+    RPCTypeCheck(request.params, {UniValue::VARR, UniValue::VOBJ, UniValue::VNUM, UniValue::VBOOL}, true);
     if (request.params[0].isNull() || request.params[1].isNull())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, arguments 1 and 2 must be non-null");
 
