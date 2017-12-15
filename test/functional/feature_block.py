@@ -1248,7 +1248,7 @@ class FullBlockTest(ComparisonTestFramework):
         #
         if self.options.runbarelyexpensive:
             tip(88)
-            LARGE_REORG_SIZE = 500
+            LARGE_REORG_SIZE = 560
             # FIXMEH: was 1088, but OOMs on 2G ram
             # armv7l machine in src/prevector.h:L183, trying to assert that
             # malloc result is not NULL. 
