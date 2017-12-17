@@ -1,3 +1,24 @@
+# Useful notes
+
+## Pulling directly from PR
+
+By editing `.git/config` to add the last `merge` line to relevant remote, commands like
+`git checkout pr/11403` checks out that branch directly:
+
+```
+[remote "upstream"]
+        url = https://github.com/bitcoin/bitcoin
+        fetch = +refs/heads/*:refs/remotes/upstream/*
+        fetch = +refs/pull/*/head:refs/remotes/upstream/pr/*
+```
+
+Note that the branches need to be fetched first with `git fetch upstream`.
+
+# Random notes of stuff to work on follows
+
+
+
+
 # autoconf confusion
 
 The confdefs.h and conftest.{cpp,err} files seem to be created during
