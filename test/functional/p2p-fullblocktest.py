@@ -1244,15 +1244,19 @@ class FullBlockTest(ComparisonTestFramework):
         #
         if self.options.runbarelyexpensive:
             tip(88)
-            LARGE_REORG_SIZE = 560
+            LARGE_REORG_SIZE = 500
             # FIXMEH: was 1088, but OOMs on 2G ram
             # armv7l machine in src/prevector.h:L183, trying to assert that
             # malloc result is not NULL. 
             # results below from running when compiled with --with-incompatible-bdb:
             # 188 passes all tests in 7m32s
             # 488 passes all tests in 11m44s
-            # 525 passes all tests in 12m48s
-            # 550 passes all tests in 13m23s
+            # 500 passes all tests in 12m37s with ASM optimizations
+            # 525 passes all tests in 12m48s, 13m8s with ASM optimizations
+            # 550 passes all tests in 13m23s, 13m33s with ASM optimizations
+            # 551 crashes in 15m14s
+            # 555 crashes in 15m10s
+            # 560 crashes in 15m15s, with ASM optimizations enabled
             # 570 crashes in 14m42s
             # 588 crashes in 15m21s
             # 688 crashes in 16m59s
