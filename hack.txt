@@ -16,21 +16,41 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Making Gitian builds easier
 
+- jonasschnelli has a page showing Gitian (reproducible builds) results at https://bitcoin.jonasschnelli.ch/build/431
+- gitian build was broken recently, so seems it's not always used
+- would be good to make it easy for anyone to run their own  Gitian builds
 
+## Improving fee estimation
 
-# autoconf confusion
+Currenty (2017-12-22), fee estimation is not taking mempool into account at all..
+
+19:39 < gmaxwell> jtimon: just go back one day of blocks, counting only blocks at least 0.95*MAX_WEIGHT in size, and check the maximum of their
+                  minimum feerates. Would be interesting to see what that yields right now. It _might_ be useful.
+19:45 < gmaxwell> sipa: so what do you think long term trying to use that block percentile as a maximum fee for a fast estimate, and then use a
+                  synced mempool to potentially reduce the number. I think that escapes the primary manipulation concerns we have.
+
+## Unexpected re-IBD after reindex
+
+18:57 < jonasschnelli> provoostenator: I think you may end up with a corrupted db.. even if you souldn't (in theory)
+18:58 < provoostenator> Oh I was monitoring memory usage, and that was about 30 GB during the reindex (I have 16 GB physical)
+18:58 < jonasschnelli> provoostenator: yes. Its fixed in 11824
+18:58 < jonasschnelli> reindex in master is currently not usable
+18:58 < provoostenator> promag: I don't know if it caused IBD, but it certain started an IBD after this happened
+
+## autoconf confusion
 
 The confdefs.h and conftest.{cpp,err} files seem to be created during
 ./configure call (removed afterward?), but it's confusing when those
 untracked files show up.. add to .gitignore?
 
-# ARM optimizations
+## ARM optimizations
 
 Try out following to use assembly optimizations for ARM:
 ./configure --with-asm=arm --enable-experimental
 
-# Performance dashboard
+## Performance dashboard
 
 Add support for monitoring memory usage and other performance, via #11822:
 
@@ -45,13 +65,13 @@ Also include IBD speed?
 20:08 < jonasschnelli> hkjn0: that would be nice. sdaftuar once mentioned that he has something like a network bypasser...
 20:09 < jonasschnelli> Because you want to measure IBD without measuring the network stack
 
-# Better testnet
+## Better testnet
 
 Discussion to replace current testnet3 with a testnet4 (possibly running both for some time)
 
 Issues with net3 is tons of blocks (1M+), very low difficulty
 
-# Codewalks
+## Codewalks
 
 03:45 < valval> is there any form of source code walkthrough?
 03:45 < valval> like where i can start off to understand the structure of the codes
@@ -59,7 +79,7 @@ Issues with net3 is tons of blocks (1M+), very low difficulty
 03:56 < sipa> that looks like a very small random dubset of function
 03:57 < sipa> i don't think there is much of a guide, and certainly no up to date one
 
-# License review
+## License review
 
 Via discussions about possibly including new lib with dual LGPL + GPL licenses, seems like libzmq (optional dependency?) already is included with LGPL:
 
