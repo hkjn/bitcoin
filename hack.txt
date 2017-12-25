@@ -16,6 +16,17 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Learn about C++ via sipa's bitcoin-seeder
+
+https://github.com/sipa/bitcoin-seeder/blob/master/main.cpp
+
+## Test blocks to increase coverage
+
+gmaxwell via https://github.com/bitcoin/bitcoin/pull/11739#issuecomment-346515145:
+"One possibility would be to instrument the codebase to call the gprof things to
+record branch coverage data at each block; an then make a list of testnet blocks that increased
+cover. Seems like a real pain though."
+
 ## Making Gitian builds easier
 
 - jonasschnelli has a page showing Gitian (reproducible builds) results at https://bitcoin.jonasschnelli.ch/build/431
