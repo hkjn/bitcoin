@@ -16,6 +16,14 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Set up dns seed
+
+C.f https://github.com/bitcoin/bitcoin/pull/11917#issuecomment-352876523
+
+## Improve script to test dns seed setup
+
+C.f. https://github.com/bitcoin/bitcoin/pull/11967#issuecomment-353290695
+
 ## Learn about C++ via sipa's bitcoin-seeder
 
 https://github.com/sipa/bitcoin-seeder/blob/master/main.cpp
