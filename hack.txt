@@ -16,6 +16,10 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Help retire ComparisonTestFramework
+
+* https://github.com/bitcoin/bitcoin/pull/11818
+
 ## Try out experimental lnd + bitcoind integration
 
 https://gist.github.com/aakselrod/5644b9319041a796ba6ffca28062376e
