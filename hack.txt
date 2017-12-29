@@ -16,6 +16,15 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Remove need for checkpoints
+
+Checkpoints hardcoded in code are often misunderstood and not necessary for consensus:
+
+* https://github.com/bitcoin/bitcoin/blob/3c098a8/src/chainparams.cpp#L149
+* https://github.com/bitcoin/bitcoin/issues/7591#issuecomment-254448921
+
+Should file issue to track work unless one already exists.
+
 ## Set up dns seed
 
 C.f https://github.com/bitcoin/bitcoin/pull/11917#issuecomment-352876523
