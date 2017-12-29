@@ -24,6 +24,12 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 https://gist.github.com/aakselrod/5644b9319041a796ba6ffca28062376e
 
+## Improve p2p-fullblocktest.py
+
+Reports in https://github.com/bitcoin/bitcoin/issues/11632 of flakiness of p2p-fullblocktest.py.
+
+It fails consistently for me too, but due to OOM in src/prevector.h, not due to timeout.
+
 ## Remove need for checkpoints
 
 Checkpoints hardcoded in code are often misunderstood and not necessary for consensus:
