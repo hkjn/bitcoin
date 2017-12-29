@@ -24,11 +24,16 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 https://gist.github.com/aakselrod/5644b9319041a796ba6ffca28062376e
 
+## Move consistently to Python3
+
+Via https://github.com/bitcoin/bitcoin/pull/11843#issuecomment-351146011, the idea has support,
+just wasn't finished in that PR.
+
 ## Improve p2p-fullblocktest.py
 
 Reports in https://github.com/bitcoin/bitcoin/issues/11632 of flakiness of p2p-fullblocktest.py.
 
-It fails consistently for me too, but due to OOM in src/prevector.h, not due to timeout.
+It fails consistently for me to/o, but due to OOM in src/prevector.h, not due to timeout.
 
 ## Remove need for checkpoints
 
