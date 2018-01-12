@@ -16,6 +16,13 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Revive PR#7601 to add templated HLTC payments
+
+https://github.com/bitcoin/bitcoin/pull/7601 added RPC endpoints for templated hash locked
+payments, which should simplify LN implementation, as well as be useful for atomic swaps and
+other situations. It is the implementation of BIP199, but ebfull who started the PR could
+not finish it. It received strong ACKs on the concept, so reviving it might be useful.
+
 ## Help retire ComparisonTestFramework
 
 * https://github.com/bitcoin/bitcoin/pull/11818
