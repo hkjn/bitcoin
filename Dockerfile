@@ -8,7 +8,7 @@ RUN pacman-key --init && \
     pacman-key --refresh-keys
  
 RUN pacman -Syyu --noconfirm
-RUN pacman -S --noconfirm git base-devel boost libevent python
+RUN pacman -S --noconfirm git base-devel boost flake8 libevent python
 
 # Run with:
 # docker run --rm -it -v $(pwd):/usr/local/src/bitcoin -w /usr/local/src/bitcoin bitcoin-dev sh
