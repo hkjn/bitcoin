@@ -16,6 +16,12 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 
 # Random notes of stuff to work on follows
 
+## Exposing fee rate / UTXO monitoring
+
+Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitcoin/pull/10757,
+but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
+to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
+
 ## Revive PR#7601 to add templated HLTC payments
 
 https://github.com/bitcoin/bitcoin/pull/7601 added RPC endpoints for templated hash locked
