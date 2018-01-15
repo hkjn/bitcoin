@@ -14,6 +14,14 @@ By editing `.git/config` to add the last `merge` line to relevant remote, comman
 
 Note that the branches need to be fetched first with `git fetch upstream`.
 
+## Using pre-push hook
+
+There's a pre-push script which can be added to the git hooks, which will verify
+that all commits are signed before pushing to github.com/bitcoin/bitcoin repo:
+```
+$ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
+```
+
 # Random notes of stuff to work on follows
 
 ## Exposing fee rate / UTXO monitoring
