@@ -43,6 +43,15 @@ ReceiveCoinsDialog::ReceiveCoinsDialog(const PlatformStyle *_platformStyle, QWid
         ui->removeRequestButton->setIcon(_platformStyle->SingleColorIcon(":/icons/remove"));
     }
 
+    // configure bech32 checkbox, disable if launched with legacy as default:
+    if (model->getDefaultAddressType() == OUTPUT_TYPE_BECH32) {
+        ui->useBech32->setCheckState(Qt::Checked);
+    } else {
+        ui->useBech32->setCheckState(Qt::Unchecked);
+    }
+
+    ui->useBech32->setVisible(model->getDefaultAddressType() != OUTPUT_TYPE_LEGACY);
+
     // context menu actions
     QAction *copyURIAction = new QAction(tr("Copy URI"), this);
     QAction *copyLabelAction = new QAction(tr("Copy label"), this);
