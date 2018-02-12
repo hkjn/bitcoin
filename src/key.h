@@ -17,16 +17,6 @@
 
 
 /**
- * secp256k1:
- */
-const unsigned int PRIVATE_KEY_SIZE            = 279;
-const unsigned int COMPRESSED_PRIVATE_KEY_SIZE = 214;
-/**
- * see www.keylength.com
- * script supports up to 75 for single byte push
- */
-
-/**
  * secure_allocator is defined in allocators.h
  * CPrivKey is a serialized private key, with all parameters included
  * (PRIVATE_KEY_SIZE bytes)

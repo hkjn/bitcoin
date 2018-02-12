@@ -14,18 +14,6 @@
 #include <stdexcept>
 #include <vector>
 
-/**
- * secp256k1:
- */
-const unsigned int PUBLIC_KEY_SIZE             = 65;
-const unsigned int COMPRESSED_PUBLIC_KEY_SIZE  = 33;
-const unsigned int SIGNATURE_SIZE              = 72;
-const unsigned int COMPACT_SIGNATURE_SIZE      = 65;
-/**
- * see www.keylength.com
- * script supports up to 75 for single byte push
- */
-
 const unsigned int BIP32_EXTKEY_SIZE = 74;
 
 /** A reference to a CKey: the Hash160 of its serialized public key */

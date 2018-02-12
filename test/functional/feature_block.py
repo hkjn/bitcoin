@@ -18,6 +18,7 @@ from test_framework.blocktools import *
 import time
 from test_framework.key import CECKey
 from test_framework.script import *
+from test_framework.mininode import network_thread_start
 import struct
 
 class PreviousSpendableOutput():
@@ -71,7 +72,7 @@ class FullBlockTest(ComparisonTestFramework):
     def run_test(self):
         self.test = TestManager(self, self.options.tmpdir)
         self.test.add_all_connections(self.nodes)
-        NetworkThread().start() # Start up network handling in another thread
+        network_thread_start() # Start up network handling in another thread
         print('FIXMEH: starting p2p-fullblocktest run()..')
         self.test.run()
 
