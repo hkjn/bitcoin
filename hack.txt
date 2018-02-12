@@ -22,6 +22,26 @@ that all commits are signed before pushing to github.com/bitcoin/bitcoin repo:
 $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 ```
 
+# Links
+
+## bip39 tool to compute private keys
+
+- https://github.com/iancoleman/bip39
+
+## Sjors notes on debugging functional tests
+
+- https://medium.com/provoost-on-crypto/debugging-bitcoin-core-functional-tests-cc0aa6e7fd3e
+
+## Try out IRC integration with Travis 
+
+- https://github.com/bitcoin/bitcoin/pull/11912 wasn't merged,
+  but attempted to add Travis -> IRC integration via
+  https://github.com/jbalogh/python-irclib/blob/master/irccat2
+
+## Try out laanwj's blockdb tools
+
+- https://github.com/laanwj/blockdb-troubleshoot
+
 # Random notes of stuff to work on follows
 
 ## Exposing fee rate / UTXO monitoring
@@ -120,7 +140,7 @@ Try out following to use assembly optimizations for ARM:
 
 ## Performance dashboard
 
-Add support for monitoring memory usage and other performance, via #11822:
+Add support for monitoring memory usage and other performance, via https://github.com/bitcoin/bitcoin/issues/11822:
 
 19:06 < sipa> that would be nice to have
 19:06 < sipa> heap usage during reindex graphs
