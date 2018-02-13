@@ -21,7 +21,9 @@ BUILD_ID_SALT ?= salt
 host:=$(BUILD)
 ifneq ($(HOST),)
 host:=$(HOST)
+ifneq ($(HOST),$(BUILD))
 host_toolchain:=$(HOST)-
+endif
 endif
 
 ifneq ($(DEBUG),)
