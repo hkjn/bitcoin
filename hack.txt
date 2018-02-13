@@ -52,6 +52,14 @@ to create graphs, to reduce code in bitcoin core and decouple GUI from wallet an
 
 ## Making non-x86_64 builds possible
 
+- Gitian setup to build in standardized VM creates deterministic builds towards all supported platforms, signed off by all participating dev keys
+- But the only source platform supported is x86_64
+- And the reference Ubuntu VM could have vulnerabilities
+- So it would be better to support more diverse cross-compilation, with several source platforms
+- This involves wrestling with depends/ system to support other source platforms, installing compilers for target platforms similar to the list of aarch64 / gnueabihf etc
+  dependencies listed in depends/README.md
+- Supported distributions also becomes a question; would be nice to start from something minimal like Alpine or better yet support several distros..
+
 15:02 < hkjn0> a bit lazy q: am I reading depends/ docs right that there's currently no way to use other platforms than x86_64 to build e.g. bdb?
 15:03 < hkjn0> so if I'm compiling code on armv7l and want wallet support, best thing to do is to get on x86_64 instead, and crosscompile towards arm as necessary?
 15:03 < hkjn0> (I did get bdb4.8 compiled from source on armv7l outside of the depends system, but had trouble getting it to be noticed by the build system..)
