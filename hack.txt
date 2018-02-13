@@ -50,6 +50,20 @@ Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitc
 but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
 to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
 
+## Making non-x86_64 builds possible
+
+15:02 < hkjn0> a bit lazy q: am I reading depends/ docs right that there's currently no way to use other platforms than x86_64 to build e.g. bdb?
+15:03 < hkjn0> so if I'm compiling code on armv7l and want wallet support, best thing to do is to get on x86_64 instead, and crosscompile towards arm as necessary?
+15:03 < hkjn0> (I did get bdb4.8 compiled from source on armv7l outside of the depends system, but had trouble getting it to be noticed by the build system..)
+15:06 < wumpus> hkjn0: the depends system assumes it's building on x86_64, however if you want to build db4 outside the depends system there's the script  contrib/install_db4.sh and the flags  BDB_LIBS="-L${BDB_PREFIX}/lib
+                -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
+15:07 < wumpus> would be nice if the depends system also supported building *from* other architectures, though
+15:10 < hkjn0> ah, great, I bet I was just misisng BDB_LIBS or somesuch.. will try out the contrib/ script
+15:10 < wumpus> esp. at some point we'd like to do gitian builds from other architectures
+15:11 < hkjn0> right. I've been setting up these weird build environments already, would be happy to try to contribute to gitian work or otherwise support other build platforms, just need to understand more of how current system
+               hangs together first.. :)
+
+
 ## Revive PR#7601 to add templated HLTC payments
 
 https://github.com/bitcoin/bitcoin/pull/7601 added RPC endpoints for templated hash locked
