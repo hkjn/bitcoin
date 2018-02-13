@@ -2,6 +2,9 @@
 
 # Install libdb4.8 (Berkeley DB).
 
+# FIXMEH: Note, this script builds bdb outside depends/ system. The
+# BDB_LIBS flag then points to where bdb lives.
+
 set -e
 
 if [ -z "${1}" ]; then
