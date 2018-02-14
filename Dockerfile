@@ -21,3 +21,9 @@ RUN pip3 install python-bitcoinlib
 #  export BDB_PREFIX='/src/db4'
 #  ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
 #  make
+
+# With wallet support, after patches to fix depends system:
+#   ./autogen.sh
+#    cd depends && make NO_QT=1 && cd ..
+#    ./configure --prefix=$(pwd)/depends/armv7l-unknown-linux-gnueabihf
+#    make
