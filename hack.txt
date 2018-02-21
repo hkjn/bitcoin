@@ -72,6 +72,10 @@ to create graphs, to reduce code in bitcoin core and decouple GUI from wallet an
                hangs together first.. :)
 
 
+## Help review / add tests to parallelization of tx index
+
+https://github.com/bitcoin/bitcoin/pull/11857
+
 ## Revive PR#7601 to add templated HLTC payments
 
 https://github.com/bitcoin/bitcoin/pull/7601 added RPC endpoints for templated hash locked
