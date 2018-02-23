@@ -1,0 +1,219 @@
+# Useful notes
+
+## Pulling directly from PR
+
+By editing `.git/config` to add the last `merge` line to relevant remote, commands like
+`git checkout pr/11403` checks out that branch directly:
+
+```
+[remote "upstream"]
+        url = https://github.com/bitcoin/bitcoin
+        fetch = +refs/heads/*:refs/remotes/upstream/*
+        fetch = +refs/pull/*/head:refs/remotes/upstream/pr/*
+```
+
+Note that the branches need to be fetched first with `git fetch upstream`.
+
+## Using pre-push hook
+
+There's a pre-push script which can be added to the git hooks, which will verify
+that all commits are signed before pushing to github.com/bitcoin/bitcoin repo:
+```
+$ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
+```
+
+# Links
+
+## bip39 tool to compute private keys
+
+- https://github.com/iancoleman/bip39
+
+## Sjors notes on debugging functional tests
+
+- https://medium.com/provoost-on-crypto/debugging-bitcoin-core-functional-tests-cc0aa6e7fd3e
+
+## Try out IRC integration with Travis 
+
+- https://github.com/bitcoin/bitcoin/pull/11912 wasn't merged,
+  but attempted to add Travis -> IRC integration via
+  https://github.com/jbalogh/python-irclib/blob/master/irccat2
+
+## Try out laanwj's blockdb tools
+
+- https://github.com/laanwj/blockdb-troubleshoot
+
+# Random notes of stuff to work on follows
+
+## Exposing fee rate / UTXO monitoring
+
+Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitcoin/pull/10757,
+but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
+to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
+
+## Making non-x86_64 builds possible
+
+- Gitian setup to build in standardized VM creates deterministic builds towards all supported platforms, signed off by all participating dev keys
+- But the only source platform supported is x86_64
+- And the reference Ubuntu VM could have vulnerabilities
+- So it would be better to support more diverse cross-compilation, with several source platforms
+- This involves wrestling with depends/ system to support other source platforms, installing compilers for target platforms similar to the list of aarch64 / gnueabihf etc
+  dependencies listed in depends/README.md
+- Supported distributions also becomes a question; would be nice to start from something minimal like Alpine or better yet support several distros..
+
+15:02 < hkjn0> a bit lazy q: am I reading depends/ docs right that there's currently no way to use other platforms than x86_64 to build e.g. bdb?
+15:03 < hkjn0> so if I'm compiling code on armv7l and want wallet support, best thing to do is to get on x86_64 instead, and crosscompile towards arm as necessary?
+15:03 < hkjn0> (I did get bdb4.8 compiled from source on armv7l outside of the depends system, but had trouble getting it to be noticed by the build system..)
+15:06 < wumpus> hkjn0: the depends system assumes it's building on x86_64, however if you want to build db4 outside the depends system there's the script  contrib/install_db4.sh and the flags  BDB_LIBS="-L${BDB_PREFIX}/lib
+                -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
+15:07 < wumpus> would be nice if the depends system also supported building *from* other architectures, though
+15:10 < hkjn0> ah, great, I bet I was just misisng BDB_LIBS or somesuch.. will try out the contrib/ script
+15:10 < wumpus> esp. at some point we'd like to do gitian builds from other architectures
+15:11 < hkjn0> right. I've been setting up these weird build environments already, would be happy to try to contribute to gitian work or otherwise support other build platforms, just need to understand more of how current system
+               hangs together first.. :)
+
+
+## Help review / add tests to parallelization of tx index
+
+https://github.com/bitcoin/bitcoin/pull/11857
+
+## Revive PR#7601 to add templated HLTC payments
+
+https://github.com/bitcoin/bitcoin/pull/7601 added RPC endpoints for templated hash locked
+payments, which should simplify LN implementation, as well as be useful for atomic swaps and
+other situations. It is the implementation of BIP199, but ebfull who started the PR could
+not finish it. It received strong ACKs on the concept, so reviving it might be useful.
+
+## Help retire ComparisonTestFramework
+
+* https://github.com/bitcoin/bitcoin/pull/11818
+
+## Try out experimental lnd + bitcoind integration
+
+https://gist.github.com/aakselrod/5644b9319041a796ba6ffca28062376e
+
+## Move consistently to Python3
+
+Via https://github.com/bitcoin/bitcoin/pull/11843#issuecomment-351146011, the idea has support,
+just wasn't finished in that PR.
+
+## Improve p2p-fullblocktest.py
+
+Reports in https://github.com/bitcoin/bitcoin/issues/11632 of flakiness of p2p-fullblocktest.py.
+
+It fails consistently for me to/o, but due to OOM in src/prevector.h, not due to timeout.
+
+## Remove need for checkpoints
+
+Checkpoints hardcoded in code are often misunderstood and not necessary for consensus:
+
+* https://github.com/bitcoin/bitcoin/blob/3c098a8/src/chainparams.cpp#L149
+* https://github.com/bitcoin/bitcoin/issues/7591#issuecomment-254448921
+
+Should file issue to track work unless one already exists.
+
+## Set up dns seed
+
+C.f https://github.com/bitcoin/bitcoin/pull/11917#issuecomment-352876523
+
+## Improve script to test dns seed setup
+
+C.f. https://github.com/bitcoin/bitcoin/pull/11967#issuecomment-353290695
+
+## Learn about C++ via sipa's bitcoin-seeder
+
+https://github.com/sipa/bitcoin-seeder/blob/master/main.cpp
+
+## Test blocks to increase coverage
+
+gmaxwell via https://github.com/bitcoin/bitcoin/pull/11739#issuecomment-346515145:
+"One possibility would be to instrument the codebase to call the gprof things to
+record branch coverage data at each block; an then make a list of testnet blocks that increased
+cover. Seems like a real pain though."
+
+## Making Gitian builds easier
+
+- jonasschnelli has a page showing Gitian (reproducible builds) results at https://bitcoin.jonasschnelli.ch/build/431
+- gitian build was broken recently, so seems it's not always used
+- would be good to make it easy for anyone to run their own  Gitian builds
+
+## Improving fee estimation
+
+Currenty (2017-12-22), fee estimation is not taking mempool into account at all..
+
+19:39 < gmaxwell> jtimon: just go back one day of blocks, counting only blocks at least 0.95*MAX_WEIGHT in size, and check the maximum of their
+                  minimum feerates. Would be interesting to see what that yields right now. It _might_ be useful.
+19:45 < gmaxwell> sipa: so what do you think long term trying to use that block percentile as a maximum fee for a fast estimate, and then use a
+                  synced mempool to potentially reduce the number. I think that escapes the primary manipulation concerns we have.
+
+## Unexpected re-IBD after reindex
+
+18:57 < jonasschnelli> provoostenator: I think you may end up with a corrupted db.. even if you souldn't (in theory)
+18:58 < provoostenator> Oh I was monitoring memory usage, and that was about 30 GB during the reindex (I have 16 GB physical)
+18:58 < jonasschnelli> provoostenator: yes. Its fixed in 11824
+18:58 < jonasschnelli> reindex in master is currently not usable
+18:58 < provoostenator> promag: I don't know if it caused IBD, but it certain started an IBD after this happened
+
+## autoconf confusion
+
+The confdefs.h and conftest.{cpp,err} files seem to be created during
+./configure call (removed afterward?), but it's confusing when those
+untracked files show up.. add to .gitignore?
+
+## ARM optimizations
+
+Try out following to use assembly optimizations for ARM:
+./configure --with-asm=arm --enable-experimental
+
+## Performance dashboard
+
+Add support for monitoring memory usage and other performance, via https://github.com/bitcoin/bitcoin/issues/11822:
+
+19:06 < sipa> that would be nice to have
+19:06 < sipa> heap usage during reindex graphs
+19:07 < sipa> as well as performance graphs
+
+Maybe inspired by https://speed.z.cash, uses https://github.com/tobami/codespeed/ ?
+
+Also include IBD speed?
+
+20:08 < jonasschnelli> hkjn0: that would be nice. sdaftuar once mentioned that he has something like a network bypasser...
+20:09 < jonasschnelli> Because you want to measure IBD without measuring the network stack
+
+## Better testnet
+
+Discussion to replace current testnet3 with a testnet4 (possibly running both for some time)
+
+Issues with net3 is tons of blocks (1M+), very low difficulty
+
+## Codewalks
+
+03:45 < valval> is there any form of source code walkthrough?
+03:45 < valval> like where i can start off to understand the structure of the codes
+03:45 < valval> http://embedded-design-vic.blogspot.sg/2017/07/bitcoin-core-tutorial-and-source-code.html is this a good source?
+03:56 < sipa> that looks like a very small random dubset of function
+03:57 < sipa> i don't think there is much of a guide, and certainly no up to date one
+
+## License review
+
+Via discussions about possibly including new lib with dual LGPL + GPL licenses, seems like libzmq (optional dependency?) already is included with LGPL:
+
+20:01 < aj> libzmq is lgpl isn't it?
+20:01 < wumpus> yes
+20:01 < wumpus> aj: no
+20:01 < sipa> more in the context of rolling hashes
+20:01 < wumpus> aj: oh, you're actually right
+20:01 < wumpus> aj: wtf, I never knew
+20:01 < wumpus> aj: however zmq is optional
+20:02 < BlueMatt> that sucks...our release binaries have lgpl crap in them and we dont have an easy way to get a bitcoind that is linked to everything but zmq?
+20:02 < aj> the release binaries have zmq now?
+20:02  * BlueMatt wonders if some altcoins are violating that license
+20:02 < BlueMatt> almost certainly are
+20:03 < achow101> releases have zmq and have had them for a while now
+20:05 < wumpus> --disable-zmq
+
+# RPC method naming improvements
+
+In #8170, gettransaction and getrawtransaction RPC methods were split up from gettransaction, but the latter might be better named
+getwallettransaction. Comments by laanwj on unsuccessfully proposed change https://github.com/bitcoin/bitcoin/pull/11797#issuecomment-350468305
+mentions several other misnamed methods, so a possible proposal to rename all methods could introduce new names, gradually deprecate and finally
+remove old names several versions later.

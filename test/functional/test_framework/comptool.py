@@ -200,8 +200,10 @@ class TestManager():
                 for node in self.p2p_connections
             )
 
+        print('FIXMEH: waiting for 2400s for blocks to be synced..')
         # --> error if not requested
-        wait_until(blocks_requested, attempts=20*num_blocks, lock=mininode_lock)
+        wait_until(blocks_requested, attempts=20*num_blocks, lock=mininode_lock,
+                timeout=2400)
 
         # Send getheaders message
         [ c.send_getheaders() for c in self.p2p_connections ]

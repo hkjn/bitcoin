@@ -254,6 +254,7 @@ def get_rpc_proxy(url, node_number, timeout=None, coveragedir=None):
         proxy_kwargs['timeout'] = timeout
 
     proxy = AuthServiceProxy(url, **proxy_kwargs)
+    # FIXMEH: move .url assignment into AuthServiceProxy.
     proxy.url = url  # store URL on proxy for info
 
     coverage_logfile = coverage.get_filename(

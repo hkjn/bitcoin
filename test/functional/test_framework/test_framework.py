@@ -182,6 +182,11 @@ class BitcoinTestFramework():
 
     def setup_chain(self):
         """Override this method to customize blockchain setup"""
+
+        # import pdb; pdb.set_trace()
+        self.log.info('''FIXMEH: test_framework.py's 
+                BitcoinTestFramework.setup_chain() is called with
+                self.options.tmpdir=%s''', self.options.tmpdir)
         self.log.info("Initializing test directory " + self.options.tmpdir)
         if self.setup_clean_chain:
             self._initialize_chain_clean()
