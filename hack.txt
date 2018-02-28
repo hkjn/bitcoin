@@ -22,6 +22,17 @@ that all commits are signed before pushing to github.com/bitcoin/bitcoin repo:
 $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 ```
 
+## Generate flamegraphs for perf:
+
+14:52 < eklitzke> hkjn0: i have a wrapper script around perf(1) here that i use to actually collect the profiling data (which
+                  requires that you have a build with debug symbols):
+                  https://github.com/eklitzke/bitcoin-tools/blob/master/perf.sh
+14:52 < eklitzke> then the flame graph itself is generated using https://github.com/brendangregg/FlameGraph
+14:53 < eklitzke> i have a wrapper script for invoking that as well here:
+                  https://github.com/eklitzke/bitcoin-tools/blob/master/gensvg.sh (although in practice i've found i often want
+                  to use grep to filter out more data before invoking flamegraph.pl)
+
+
 # Links
 
 ## bip39 tool to compute private keys
