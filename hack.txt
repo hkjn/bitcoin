@@ -121,6 +121,11 @@ https://gist.github.com/aakselrod/5644b9319041a796ba6ffca28062376e
 Via https://github.com/bitcoin/bitcoin/pull/11843#issuecomment-351146011, the idea has support,
 just wasn't finished in that PR.
 
+## Define python style guide
+
+There's no official .py style guide for the project currently (Q1 2018), and attempts to move
+towards PEP8 like https://github.com/bitcoin/bitcoin/pull/10366 seems controversial.
+
 ## Improve p2p-fullblocktest.py
 
 Reports in https://github.com/bitcoin/bitcoin/issues/11632 of flakiness of p2p-fullblocktest.py.
