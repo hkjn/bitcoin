@@ -26,7 +26,7 @@ logger = logging.getLogger("TestFramework.utils")
 
 def assert_fee_amount(fee, tx_size, fee_per_kB):
     """Assert the fee was in range"""
-    target_fee = tx_size * fee_per_kB / 1000
+    target_fee = round(tx_size * fee_per_kB / 1000, 8)
     if fee < target_fee:
         raise AssertionError("Fee of %s BTC too low! (Should be %s BTC)" % (str(fee), str(target_fee)))
     # allow the wallet's estimation to be at most 2 bytes off
@@ -292,11 +292,20 @@ def initialize_datadir(dirname, n):
         f.write("regtest=1\n")
         f.write("port=" + str(p2p_port(n)) + "\n")
         f.write("rpcport=" + str(rpc_port(n)) + "\n")
+        f.write("server=1\n")
+        f.write("keypool=1\n")
+        f.write("discover=0\n")
         f.write("listenonion=0\n")
     return datadir
 
 def get_datadir_path(dirname, n):
     return os.path.join(dirname, "node" + str(n))
+
+def append_config(dirname, n, options):
+    datadir = get_datadir_path(dirname, n)
+    with open(os.path.join(datadir, "bitcoin.conf"), 'a', encoding='utf8') as f:
+        for option in options:
+            f.write(option + "\n")
 
 def get_auth_cookie(datadir):
     user = None
@@ -319,9 +328,6 @@ def get_auth_cookie(datadir):
     if user is None or password is None:
         raise ValueError("No RPC credentials")
     return user, password
-
-def log_filename(dirname, n_node, logname):
-    return os.path.join(dirname, "node" + str(n_node), "regtest", logname)
 
 def get_bip9_status(node, key):
     info = node.getblockchaininfo()
@@ -362,54 +368,29 @@ def sync_blocks(rpc_connections, *, wait=1, timeout=60):
     one node already synced to the latest, stable tip, otherwise there's a
     chance it might return before all nodes are stably synced.
     """
-    # Use getblockcount() instead of waitforblockheight() to determine the
-    # initial max height because the two RPCs look at different internal global
-    # variables (chainActive vs latestBlock) and the former gets updated
-    # earlier.
-    maxheight = max(x.getblockcount() for x in rpc_connections)
-    start_time = cur_time = time.time()
-    while cur_time <= start_time + timeout:
-        tips = [r.waitforblockheight(maxheight, int(wait * 1000)) for r in rpc_connections]
-        if all(t["height"] == maxheight for t in tips):
-            if all(t["hash"] == tips[0]["hash"] for t in tips):
-                return
-            raise AssertionError("Block sync failed, mismatched block hashes:{}".format(
-                                 "".join("\n  {!r}".format(tip) for tip in tips)))
-        cur_time = time.time()
-    raise AssertionError("Block sync to height {} timed out:{}".format(
-                         maxheight, "".join("\n  {!r}".format(tip) for tip in tips)))
-
-def sync_chain(rpc_connections, *, wait=1, timeout=60):
-    """
-    Wait until everybody has the same best block
-    """
-    while timeout > 0:
+    stop_time = time.time() + timeout
+    while time.time() <= stop_time:
         best_hash = [x.getbestblockhash() for x in rpc_connections]
-        if best_hash == [best_hash[0]] * len(best_hash):
+        if best_hash.count(best_hash[0]) == len(rpc_connections):
             return
         time.sleep(wait)
-        timeout -= wait
-    raise AssertionError("Chain sync failed: Best block hashes don't match")
+    raise AssertionError("Block sync timed out:{}".format("".join("\n  {!r}".format(b) for b in best_hash)))
 
 def sync_mempools(rpc_connections, *, wait=1, timeout=60, flush_scheduler=True):
     """
     Wait until everybody has the same transactions in their memory
     pools
     """
-    while timeout > 0:
-        pool = set(rpc_connections[0].getrawmempool())
-        num_match = 1
-        for i in range(1, len(rpc_connections)):
-            if set(rpc_connections[i].getrawmempool()) == pool:
-                num_match = num_match + 1
-        if num_match == len(rpc_connections):
+    stop_time = time.time() + timeout
+    while time.time() <= stop_time:
+        pool = [set(r.getrawmempool()) for r in rpc_connections]
+        if pool.count(pool[0]) == len(rpc_connections):
             if flush_scheduler:
                 for r in rpc_connections:
                     r.syncwithvalidationinterfacequeue()
             return
         time.sleep(wait)
-        timeout -= wait
-    raise AssertionError("Mempool sync failed")
+    raise AssertionError("Mempool sync timed out:{}".format("".join("\n  {!r}".format(m) for m in pool)))
 
 # Transaction/Block functions
 #############################

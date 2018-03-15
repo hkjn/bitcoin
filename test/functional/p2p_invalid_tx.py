@@ -40,14 +40,12 @@ class InvalidTxRequestTest(ComparisonTestFramework):
         Create a new block with an anyone-can-spend coinbase
         '''
         height = 1
-        block = create_block(self.tip, create_coinbase(height), self.block_time)
-        self.block_time += 1
+        block = create_block(tip, create_coinbase(height), block_time)
         block.solve()
         # Save the coinbase for later
-        self.block1 = block
-        self.tip = block.sha256
-        height += 1
-        yield TestInstance([[block, True]])
+        block1 = block
+        tip = block.sha256
+        node.p2p.send_blocks_and_test([block], node, success=True)
 
         '''
         Now we need that block to mature so we can spend the coinbase.
@@ -67,7 +65,10 @@ class InvalidTxRequestTest(ComparisonTestFramework):
         tx1 = create_transaction(self.block1.vtx[0], 0, b'\x64', 50 * COIN - 12000)
         yield TestInstance([[tx1, RejectResult(16, b'mandatory-script-verify-flag-failed')]])
 
-        # TODO: test further transactions...
+        # Verify valid transaction
+        tx1 = create_transaction(block1.vtx[0], 0, b'', 50 * COIN - 12000)
+        node.p2p.send_txs_and_test([tx1], node, success=True)
+
 
 if __name__ == '__main__':
     InvalidTxRequestTest().main()
