@@ -3,7 +3,7 @@ FROM hkjn/arch
 COPY gpg.conf /etc/pacman.d/gnupg/
  
 RUN pacman -Syyu --noconfirm
-RUN pacman -S --noconfirm git base-devel boost flake8 libevent python python-pip valgrind
+RUN pacman -S --noconfirm git base-devel boost flake8 libevent libunwind python python-pip valgrind
 RUN pip3 install python-bitcoinlib
 
 # Build and run with:
