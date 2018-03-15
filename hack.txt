@@ -14,6 +14,9 @@ By editing `.git/config` to add the last `merge` line to relevant remote, comman
 
 Note that the branches need to be fetched first with `git fetch upstream`.
 
+Via https://gist.github.com/ajtowns/d0cf97678dc83efdf3f6cbf7083a35a0, ajtowns has scripts
+for detecting when merging PR #1 will cause PR #2 and #3 (..) to conflict.
+
 ## Using pre-push hook
 
 There's a pre-push script which can be added to the git hooks, which will verify
@@ -53,6 +56,10 @@ $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 
 - https://github.com/laanwj/blockdb-troubleshoot
 
+## Learn about SystemTap probes
+
+https://eklitzke.org/how-sytemtap-userspace-probes-work
+
 # Random notes of stuff to work on follows
 
 ## Exposing fee rate / UTXO monitoring
@@ -60,6 +67,13 @@ $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitcoin/pull/10757,
 but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
 to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
+
+## Understand BIP174 for partially signed bitcoin transactions
+
+PR from achow101 to implement it at https://github.com/bitcoin/bitcoin/pull/12136.
+
+Could be used to make it simpler to collaboratively construct multisig or coinjoin txs, e.g. using
+several different types of hardware wallets + spv wallets before allowing funds to be moved.
 
 ## Making non-x86_64 builds possible
 
