@@ -1,7 +1,5 @@
 FROM hkjn/arch
 
-COPY gpg.conf /etc/pacman.d/gnupg/
- 
 RUN pacman -Syyu --noconfirm
 RUN pacman -S --noconfirm git base-devel boost flake8 libevent libunwind python python-pip valgrind
 RUN pip3 install python-bitcoinlib
@@ -24,6 +22,6 @@ RUN pip3 install python-bitcoinlib
 
 # With wallet support, after patches to fix depends system:
 #   ./autogen.sh
-#    cd depends && make NO_QT=1 && cd ..
+#    cd depends && make && cd ..
 #    ./configure --prefix=$(pwd)/depends/armv7l-unknown-linux-gnueabihf
 #    make
