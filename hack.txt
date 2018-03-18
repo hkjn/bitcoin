@@ -68,6 +68,10 @@ Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitc
 but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
 to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
 
+## Understand current state of getting mixing (e.g CoinJoin / CoinShuffle) support merged
+
+https://github.com/bitcoin/bitcoin/issues/3226
+
 ## Understand current blockers to using U2F-compliant security keys for managing keys
 
 https://github.com/bitcoin/bitcoin/issues/10112
