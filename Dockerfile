@@ -1,7 +1,7 @@
 FROM hkjn/arch
 
 RUN pacman -Syyu --noconfirm
-RUN pacman -S --noconfirm git base-devel boost flake8 libevent libunwind python python-pip valgrind
+RUN pacman -S --noconfirm git base-devel boost doxygen flake8 libevent libunwind moc python python-pip valgrind qt5
 RUN pip3 install python-bitcoinlib
 
 # Build and run with:
