@@ -68,12 +68,34 @@ Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitc
 but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
 to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
 
+## Understand current blockers to using U2F-compliant security keys for managing keys
+
+https://github.com/bitcoin/bitcoin/issues/10112
+
+Lots of links in issue #10112, e.g to jonasschnelli's thread in 2016 to propose a BIP for
+a hardware wallet standard, which unfortunately fizzled out:
+
+- https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-August/013008.html
+
+achow has a lib with support for several hardware wallets, could be useful as a basis for
+defining a shared minimal interface:
+
+- https://github.com/achow101/HWI/blob/master/hwi.py
+
 ## Understand BIP174 for partially signed bitcoin transactions
 
 PR from achow101 to implement it at https://github.com/bitcoin/bitcoin/pull/12136.
 
 Could be used to make it simpler to collaboratively construct multisig or coinjoin txs, e.g. using
 several different types of hardware wallets + spv wallets before allowing funds to be moved.
+
+## Understand / help review ryanofsky's PR to more cleanly separate node, wallet and gui components
+
+- https://github.com/bitcoin/bitcoin/pull/10244
+
+## Help review / test PR to add sethdseed RPC
+
+https://github.com/bitcoin/bitcoin/pull/12560
 
 ## Making non-x86_64 builds possible
 
@@ -84,6 +106,25 @@ several different types of hardware wallets + spv wallets before allowing funds 
 - This involves wrestling with depends/ system to support other source platforms, installing compilers for target platforms similar to the list of aarch64 / gnueabihf etc
   dependencies listed in depends/README.md
 - Supported distributions also becomes a question; would be nice to start from something minimal like Alpine or better yet support several distros..
+
+What's missing for qt5 to work on armv7l?
+
+configure: WARNING: Doxygen not found
+checking miniupnpc/upnperrors.h presence... yes
+checking for miniupnpc/upnperrors.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for Qt5Core Qt5Gui Qt5Network Qt5Widgets... yes
+checking for Qt5Test... yes
+checking for Qt5DBus... yes
+checking for static Qt... no
+checking whether -fPIE can be used with this Qt config... yes
+checking for moc-qt5... no
+checking for moc5... no
+checking for moc... no
+configure: WARNING: MOC not found; bitcoin-qt frontend will not be built
+checking whether to build Bitcoin Core GUI... no (Qt5)
+checking for boostlib >= 1.47.0... yes
+
 
 15:02 < hkjn0> a bit lazy q: am I reading depends/ docs right that there's currently no way to use other platforms than x86_64 to build e.g. bdb?
 15:03 < hkjn0> so if I'm compiling code on armv7l and want wallet support, best thing to do is to get on x86_64 instead, and crosscompile towards arm as necessary?
