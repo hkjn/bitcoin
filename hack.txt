@@ -56,6 +56,10 @@ $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 
 - https://github.com/laanwj/blockdb-troubleshoot
 
+## Try out eklitzke's utxo dump tool
+
+- https://gist.github.com/eklitzke/03b1c799408d4bcceca9c57ab1ff8c9f
+
 ## Learn about SystemTap probes
 
 https://eklitzke.org/how-sytemtap-userspace-probes-work
