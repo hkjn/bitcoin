@@ -1,0 +1,6 @@
+pr/12713: Track negated options better by eklitzke
+pr/12714: Introduce interface for signing providers by sipa
+pr/12569: net: Increase signal-to-noise ratio in debug.log by adjusting log level when logging failed non-manual connect():s by practicalswift
+pr/12744: Completely eliminate dependency on boost::program_option by eklitzke
+pr/12649: Add documentation about generating flame graphs. by eklitzke
+pr/12656: Add scripts for doing gitian builds on any platform using VirtualBox + Vagrant + Packer by maaku
