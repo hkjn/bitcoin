@@ -35,6 +35,8 @@ $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
                   https://github.com/eklitzke/bitcoin-tools/blob/master/gensvg.sh (although in practice i've found i often want
                   to use grep to filter out more data before invoking flamegraph.pl)
 
+There is a pending PR to add docs on this:
+pr/12649: Add documentation about generating flame graphs. by eklitzke
 
 # Links
 
@@ -75,6 +77,12 @@ to create graphs, to reduce code in bitcoin core and decouple GUI from wallet an
 ## Understand current state of getting mixing (e.g CoinJoin / CoinShuffle) support merged
 
 https://github.com/bitcoin/bitcoin/issues/3226
+
+## Set up include-what-you-use checks for C++ code
+
+https://github.com/bitcoin/bitcoin/pull/12672 attempted to manually remove some unused
+includes, but reviewers agreed that setting up Travis checks using iwyu would be
+much better than spot efforts.
 
 ## Understand current blockers to using U2F-compliant security keys for managing keys
 
@@ -214,6 +222,7 @@ cover. Seems like a real pain though."
 - jonasschnelli has a page showing Gitian (reproducible builds) results at https://bitcoin.jonasschnelli.ch/build/431
 - gitian build was broken recently, so seems it's not always used
 - would be good to make it easy for anyone to run their own  Gitian builds
+- pending pr/12656 attempts to standardize/simplify gitian setup to use virtualbox+vagrant+packer
 
 ## Improving fee estimation
 
