@@ -4,3 +4,6 @@ pr/12569: net: Increase signal-to-noise ratio in debug.log by adjusting log leve
 pr/12744: Completely eliminate dependency on boost::program_option by eklitzke
 pr/12649: Add documentation about generating flame graphs. by eklitzke
 pr/12656: Add scripts for doing gitian builds on any platform using VirtualBox + Vagrant + Packer by maaku
+pr/10922: New file-partition.md doc (closed but seems like good docs)
+pr/12756: [config] Remove blockmaxsize option by jnwebery
+pr/12653: Allow to optional specify the directory for the blocks storage by jonasschnelli
