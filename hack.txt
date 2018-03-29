@@ -17,6 +17,12 @@ Note that the branches need to be fetched first with `git fetch upstream`.
 Via https://gist.github.com/ajtowns/d0cf97678dc83efdf3f6cbf7083a35a0, ajtowns has scripts
 for detecting when merging PR #1 will cause PR #2 and #3 (..) to conflict.
 
+## Resetting branch tracking upstream with force pushed changes
+
+```
+$ git reset upstream/pr/12713 --hard
+```
+
 ## Using pre-push hook
 
 There's a pre-push script which can be added to the git hooks, which will verify
