@@ -14,9 +14,9 @@ pr/12653: Allow to optional specify the directory for the blocks storage by jona
 
 # Done reviewing
 
-pr/12759: [Docs] Improve formatting of developer notes by eklitzke
 pr/12713: Track negated options better by eklitzke
 
 # Merged
 
+pr/12759: [Docs] Improve formatting of developer notes by eklitzke
 pr/12760: Docs: Improve documentation on standard communication channels by jimpo
