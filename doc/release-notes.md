@@ -109,9 +109,18 @@ Low-level RPC changes
 
 - The log timestamp format is now ISO 8601 (e.g. "2018-02-28T12:34:56Z").
 
-- `dumpwallet` now includes hex-encoded scripts from the wallet in the dumpfile, and
-  `importwallet` now imports these scripts, but corresponding addresses may not be added
-  correctly or a manual rescan may be required to find relevant transactions.
+Miner block size removed
+------------------------
+
+The `-blockmaxsize` option for miners to limit their blocks' sizes was
+deprecated in V0.15.1, and has now been removed. Miners should use the
+`-blockmaxweight` option if they want to limit the weight of their blocks'
+weights.
+
+Python Support
+--------------
+
+Support for Python 2 has been discontinued for all test files and tools.
 
 Credits
 =======
