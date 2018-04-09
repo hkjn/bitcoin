@@ -90,6 +90,7 @@ https://github.com/bitcoin/bitcoin/pull/12672 attempted to manually remove some 
 includes, but reviewers agreed that setting up Travis checks using iwyu would be
 much better than spot efforts.
 
+
 ## Understand current blockers to using U2F-compliant security keys for managing keys
 
 https://github.com/bitcoin/bitcoin/issues/10112
@@ -203,6 +204,14 @@ Checkpoints hardcoded in code are often misunderstood and not necessary for cons
 * https://github.com/bitcoin/bitcoin/issues/7591#issuecomment-254448921
 
 Should file issue to track work unless one already exists.
+
+Some detail on what's needed to eliminate it:
+
+21:05 < sipa> we need backward headers sync to remove that dependency on checkpoints
+21:06 < stevenroose> backward header sync?
+21:06 < sipa> first learn the best header, and only then download headers along that path
+21:06 < sipa> as opposed to downloading whatever header people give you, hoping that indeed it'll turn out to be one with more work than your current one
+21:07 < sipa> (that's how it works now)
 
 ## Set up dns seed
 
