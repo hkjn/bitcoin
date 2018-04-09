@@ -14,6 +14,7 @@ pr/12653: Allow to optional specify the directory for the blocks storage by jona
 
 # Done reviewing
 
+pr/12829: Python3 fixup
 pr/12713: Track negated options better by eklitzke
 
 # Merged
