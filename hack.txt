@@ -44,6 +44,12 @@ $ ln -s ../../contrib/verify-commits/pre-push-hook.sh .git/hooks/pre-push
 There is a pending PR to add docs on this:
 pr/12649: Add documentation about generating flame graphs. by eklitzke
 
+## Running docker containers allowing ptrace()
+
+```
+docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined [...]
+```
+
 # Links
 
 ## bip39 tool to compute private keys
