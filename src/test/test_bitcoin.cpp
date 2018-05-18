@@ -11,6 +11,7 @@
 #include <validation.h>
 #include <miner.h>
 #include <net_processing.h>
+#include <pow.h>
 #include <ui_interface.h>
 #include <streams.h>
 #include <rpc/server.h>
@@ -38,6 +39,12 @@ FastRandomContext insecure_rand_ctx(insecure_rand_seed);
 extern bool fPrintToConsole;
 extern void noui_connect();
 
+std::ostream& operator<<(std::ostream& os, const uint256& num)
+{
+    os << num.ToString();
+    return os;
+}
+
 BasicTestingSetup::BasicTestingSetup(const std::string& chainName)
 {
         SHA256AutoDetect();
@@ -47,7 +54,6 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName)
         SetupNetworking();
         InitSignatureCache();
         InitScriptExecutionCache();
-        fPrintToDebugLog = false; // don't want to write to debug.log file
         fCheckBlockIndex = true;
         SelectParams(chainName);
         noui_connect();
@@ -85,7 +91,7 @@ TestingSetup::TestingSetup(const std::string& chainName) : BasicTestingSetup(cha
         {
             CValidationState state;
             if (!ActivateBestChain(state, chainparams)) {
-                throw std::runtime_error("ActivateBestChain failed.");
+                throw std::runtime_error(strprintf("ActivateBestChain failed. (%s)", FormatStateMessage(state)));
             }
         }
         nScriptCheckThreads = 3;

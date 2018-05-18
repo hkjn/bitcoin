@@ -7,7 +7,6 @@
 
 #include <addrdb.h>     // For banmap_t
 #include <amount.h>     // For CAmount
-#include <init.h>       // For HelpMessageMode
 #include <net.h>        // For CConnman::NumConnections
 #include <netaddress.h> // For Network
 
@@ -26,11 +25,9 @@ class Coin;
 class RPCTimerInterface;
 class UniValue;
 class proxyType;
-enum class FeeReason;
 struct CNodeStateStats;
 
 namespace interfaces {
-
 class Handler;
 class Wallet;
 
@@ -50,7 +47,7 @@ public:
     virtual bool softSetBoolArg(const std::string& arg, bool value) = 0;
 
     //! Load settings from configuration file.
-    virtual void readConfigFile(const std::string& conf_path) = 0;
+    virtual void readConfigFiles() = 0;
 
     //! Choose network parameters.
     virtual void selectParams(const std::string& network) = 0;
@@ -85,8 +82,8 @@ public:
     //! Return whether shutdown was requested.
     virtual bool shutdownRequested() = 0;
 
-    //! Get help message string.
-    virtual std::string helpMessage(HelpMessageMode mode) = 0;
+    //! Setup arguments
+    virtual void setupServerArgs() = 0;
 
     //! Map port.
     virtual void mapPort(bool use_upnp) = 0;
@@ -151,18 +148,6 @@ public:
 
     //! Get network active.
     virtual bool getNetworkActive() = 0;
-
-    //! Get tx confirm target.
-    virtual unsigned int getTxConfirmTarget() = 0;
-
-    //! Get required fee.
-    virtual CAmount getRequiredFee(unsigned int tx_bytes) = 0;
-
-    //! Get minimum fee.
-    virtual CAmount getMinimumFee(unsigned int tx_bytes,
-        const CCoinControl& coin_control,
-        int* returned_target,
-        FeeReason* reason) = 0;
 
     //! Get max tx fee.
     virtual CAmount getMaxTxFee() = 0;

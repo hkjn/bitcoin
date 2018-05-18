@@ -91,6 +91,19 @@ class MultiWalletTest(BitcoinTestFramework):
         open(not_a_dir, 'a').close()
         self.nodes[0].assert_start_raises_init_error(['-walletdir=' + not_a_dir], 'Error: Specified -walletdir "' + not_a_dir + '" is not a directory')
 
+        self.log.info("Do not allow -zapwallettxes with multiwallet")
+        self.nodes[0].assert_start_raises_init_error(['-zapwallettxes', '-wallet=w1', '-wallet=w2'], "Error: -zapwallettxes is only allowed with a single wallet file")
+        self.nodes[0].assert_start_raises_init_error(['-zapwallettxes=1', '-wallet=w1', '-wallet=w2'], "Error: -zapwallettxes is only allowed with a single wallet file")
+        self.nodes[0].assert_start_raises_init_error(['-zapwallettxes=2', '-wallet=w1', '-wallet=w2'], "Error: -zapwallettxes is only allowed with a single wallet file")
+
+        self.log.info("Do not allow -salvagewallet with multiwallet")
+        self.nodes[0].assert_start_raises_init_error(['-salvagewallet', '-wallet=w1', '-wallet=w2'], "Error: -salvagewallet is only allowed with a single wallet file")
+        self.nodes[0].assert_start_raises_init_error(['-salvagewallet=1', '-wallet=w1', '-wallet=w2'], "Error: -salvagewallet is only allowed with a single wallet file")
+
+        self.log.info("Do not allow -upgradewallet with multiwallet")
+        self.nodes[0].assert_start_raises_init_error(['-upgradewallet', '-wallet=w1', '-wallet=w2'], "Error: -upgradewallet is only allowed with a single wallet file")
+        self.nodes[0].assert_start_raises_init_error(['-upgradewallet=1', '-wallet=w1', '-wallet=w2'], "Error: -upgradewallet is only allowed with a single wallet file")
+
         # if wallets/ doesn't exist, datadir should be the default wallet dir
         wallet_dir2 = data_dir('walletdir')
         os.rename(wallet_dir(), wallet_dir2)
@@ -149,6 +162,54 @@ class MultiWalletTest(BitcoinTestFramework):
         batch = w1.batch([w1.getblockchaininfo.get_request(), w1.getwalletinfo.get_request()])
         assert_equal(batch[0]["result"]["chain"], "regtest")
         assert_equal(batch[1]["result"]["walletname"], "w1")
+
+        self.log.info('Check for per-wallet settxfee call')
+        assert_equal(w1.getwalletinfo()['paytxfee'], 0)
+        assert_equal(w2.getwalletinfo()['paytxfee'], 0)
+        w2.settxfee(4.0)
+        assert_equal(w1.getwalletinfo()['paytxfee'], 0)
+        assert_equal(w2.getwalletinfo()['paytxfee'], 4.0)
+
+        self.log.info("Test dynamic wallet loading")
+
+        self.restart_node(0, ['-nowallet'])
+        assert_equal(node.listwallets(), [])
+        assert_raises_rpc_error(-32601, "Method not found", node.getwalletinfo)
+
+        self.log.info("Load first wallet")
+        loadwallet_name = node.loadwallet(wallet_names[0])
+        assert_equal(loadwallet_name['name'], wallet_names[0])
+        assert_equal(node.listwallets(), wallet_names[0:1])
+        node.getwalletinfo()
+        w1 = node.get_wallet_rpc(wallet_names[0])
+        w1.getwalletinfo()
+
+        self.log.info("Load second wallet")
+        loadwallet_name = node.loadwallet(wallet_names[1])
+        assert_equal(loadwallet_name['name'], wallet_names[1])
+        assert_equal(node.listwallets(), wallet_names[0:2])
+        assert_raises_rpc_error(-19, "Wallet file not specified", node.getwalletinfo)
+        w2 = node.get_wallet_rpc(wallet_names[1])
+        w2.getwalletinfo()
+
+        self.log.info("Load remaining wallets")
+        for wallet_name in wallet_names[2:]:
+            loadwallet_name = self.nodes[0].loadwallet(wallet_name)
+            assert_equal(loadwallet_name['name'], wallet_name)
+
+        assert_equal(set(self.nodes[0].listwallets()), set(wallet_names))
+
+        # Fail to load if wallet doesn't exist
+        assert_raises_rpc_error(-18, 'Wallet wallets not found.', self.nodes[0].loadwallet, 'wallets')
+
+        # Fail to load duplicate wallets
+        assert_raises_rpc_error(-4, 'Wallet file verification failed: Error loading wallet w1. Duplicate -wallet filename specified.', self.nodes[0].loadwallet, wallet_names[0])
+
+        # Fail to load if one wallet is a copy of another
+        assert_raises_rpc_error(-1, "BerkeleyBatch: Can't open database w8_copy (duplicates fileid", self.nodes[0].loadwallet, 'w8_copy')
+
+        # Fail to load if wallet file is a symlink
+        assert_raises_rpc_error(-4, "Wallet file verification failed: Invalid -wallet path 'w8_symlink'", self.nodes[0].loadwallet, 'w8_symlink')
 
 if __name__ == '__main__':
     MultiWalletTest().main()

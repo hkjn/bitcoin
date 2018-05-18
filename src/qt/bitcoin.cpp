@@ -234,6 +234,7 @@ public Q_SLOTS:
     void shutdownResult();
     /// Handle runaway exceptions. Shows a message box with the problem and quits the program.
     void handleRunawayException(const QString &message);
+    void addWallet(WalletModel* walletModel);
 
 Q_SIGNALS:
     void requestedInitialize();
@@ -251,6 +252,7 @@ private:
 #ifdef ENABLE_WALLET
     PaymentServer* paymentServer;
     std::vector<WalletModel*> m_wallet_models;
+    std::unique_ptr<interfaces::Handler> m_handler_load_wallet;
 #endif
     int returnValue;
     const PlatformStyle *platformStyle;
@@ -403,6 +405,10 @@ void BitcoinApplication::startThread()
 
 void BitcoinApplication::parameterSetup()
 {
+    // Default printtoconsole to false for the GUI. GUI programs should not
+    // print to the console unnecessarily.
+    gArgs.SoftSetBoolArg("-printtoconsole", false);
+
     m_node.initLogging();
     m_node.initParameterInteraction();
 }
@@ -443,6 +449,22 @@ void BitcoinApplication::requestShutdown()
     Q_EMIT requestedShutdown();
 }
 
+void BitcoinApplication::addWallet(WalletModel* walletModel)
+{
+#ifdef ENABLE_WALLET
+    window->addWallet(walletModel);
+
+    if (m_wallet_models.empty()) {
+        window->setCurrentWallet(walletModel->getWalletName());
+    }
+
+    connect(walletModel, SIGNAL(coinsSent(WalletModel*, SendCoinsRecipient, QByteArray)),
+        paymentServer, SLOT(fetchPaymentACK(WalletModel*, const SendCoinsRecipient&, QByteArray)));
+
+    m_wallet_models.push_back(walletModel);
+#endif
+}
+
 void BitcoinApplication::initializeResult(bool success)
 {
     qDebug() << __func__ << ": Initialization result: " << success;
@@ -461,21 +483,13 @@ void BitcoinApplication::initializeResult(bool success)
         window->setClientModel(clientModel);
 
 #ifdef ENABLE_WALLET
-        bool fFirstWallet = true;
-        auto wallets = m_node.getWallets();
-        for (auto& wallet : wallets) {
-            WalletModel * const walletModel = new WalletModel(std::move(wallet), m_node, platformStyle, optionsModel);
+        m_handler_load_wallet = m_node.handleLoadWallet([this](std::unique_ptr<interfaces::Wallet> wallet) {
+            QMetaObject::invokeMethod(this, "addWallet", Qt::QueuedConnection,
+                Q_ARG(WalletModel*, new WalletModel(std::move(wallet), m_node, platformStyle, optionsModel)));
+        });
 
-            window->addWallet(walletModel);
-            if (fFirstWallet) {
-                window->setCurrentWallet(walletModel->getWalletName());
-                fFirstWallet = false;
-            }
-
-            connect(walletModel, SIGNAL(coinsSent(WalletModel*,SendCoinsRecipient,QByteArray)),
-                             paymentServer, SLOT(fetchPaymentACK(WalletModel*,const SendCoinsRecipient&,QByteArray)));
-
-            m_wallet_models.push_back(walletModel);
+        for (auto& wallet : m_node.getWallets()) {
+            addWallet(new WalletModel(std::move(wallet), m_node, platformStyle, optionsModel));
         }
 #endif
 
@@ -527,6 +541,20 @@ WId BitcoinApplication::getMainWinId() const
     return window->winId();
 }
 
+static void SetupUIArgs()
+{
+#ifdef ENABLE_WALLET
+    gArgs.AddArg("-allowselfsignedrootcertificates", strprintf("Allow self signed root certificates (default: %u)", DEFAULT_SELFSIGNED_ROOTCERTS), true, OptionsCategory::GUI);
+#endif
+    gArgs.AddArg("-choosedatadir", strprintf(QObject::tr("Choose data directory on startup (default: %u)").toStdString(), DEFAULT_CHOOSE_DATADIR), false, OptionsCategory::GUI);
+    gArgs.AddArg("-lang=<lang>", QObject::tr("Set language, for example \"de_DE\" (default: system locale)").toStdString(), false, OptionsCategory::GUI);
+    gArgs.AddArg("-min", QObject::tr("Start minimized").toStdString(), false, OptionsCategory::GUI);
+    gArgs.AddArg("-resetguisettings", QObject::tr("Reset all settings changed in the GUI").toStdString(), false, OptionsCategory::GUI);
+    gArgs.AddArg("-rootcertificates=<file>", QObject::tr("Set SSL root certificates for payment request (default: -system-)").toStdString(), false, OptionsCategory::GUI);
+    gArgs.AddArg("-splash", strprintf(QObject::tr("Show splash screen on startup (default: %u)").toStdString(), DEFAULT_SPLASHSCREEN), false, OptionsCategory::GUI);
+    gArgs.AddArg("-uiplatform", strprintf("Select platform to customize UI for (one of windows, macosx, other; default: %s)", BitcoinGUI::DEFAULT_UIPLATFORM), true, OptionsCategory::GUI);
+}
+
 #ifndef BITCOIN_QT_TEST
 int main(int argc, char *argv[])
 {
@@ -536,6 +564,8 @@ int main(int argc, char *argv[])
 
     /// 1. Parse command-line options. These take precedence over anything else.
     // Command-line options take precedence:
+    node->setupServerArgs();
+    SetupUIArgs();
     node->parseParameters(argc, argv);
 
     // Do not refer to data directory yet, this can be overridden by Intro::pickDataDirectory
@@ -575,6 +605,9 @@ int main(int argc, char *argv[])
     //   IMPORTANT if it is no longer a typedef use the normal variant above
     qRegisterMetaType< CAmount >("CAmount");
     qRegisterMetaType< std::function<void(void)> >("std::function<void(void)>");
+#ifdef ENABLE_WALLET
+    qRegisterMetaType<WalletModel*>("WalletModel*");
+#endif
 
     /// 3. Application identification
     // must be set before OptionsModel is initialized or translations are loaded,
@@ -612,7 +645,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
     try {
-        node->readConfigFile(gArgs.GetArg("-conf", BITCOIN_CONF_FILENAME));
+        node->readConfigFiles();
     } catch (const std::exception& e) {
         QMessageBox::critical(0, QObject::tr(PACKAGE_NAME),
                               QObject::tr("Error: Cannot parse configuration file: %1. Only use key=value syntax.").arg(e.what()));

@@ -572,7 +572,7 @@ BOOST_AUTO_TEST_CASE(util_GetChainName)
     BOOST_CHECK_THROW(test_args.GetChainName(), std::runtime_error);
 
     // check setting the network to test (and thus making
-    // [test] regtest=1 potentially relevent) doesn't break things
+    // [test] regtest=1 potentially relevant) doesn't break things
     test_args.SelectConfigNetwork("test");
 
     test_args.ParseParameters(0, (char**)argv_testnet);
@@ -1065,6 +1065,7 @@ static void TestOtherProcess(fs::path dirname, std::string lockname, int fd)
             ReleaseDirectoryLocks();
             ch = true; // Always succeeds
             rv = write(fd, &ch, 1);
+            assert(rv == 1);
             break;
         case ExitCommand:
             close(fd);
