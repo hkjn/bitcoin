@@ -86,6 +86,9 @@ Fee and UTXO size statistics are added to GUI in https://github.com/bitcoin/bitc
 but might be preferable to expose metrics (e.g. Prometheus) in endpoints and allow external tools
 to create graphs, to reduce code in bitcoin core and decouple GUI from wallet and rest of logic.
 
+Issue #10887 covers this explicitly, with PR #8501 (open as of 2018-05-18) by jonasschnelli
+ding statistics specifically for mempool.
+
 ## Understand current state of getting mixing (e.g CoinJoin / CoinShuffle) support merged
 
 https://github.com/bitcoin/bitcoin/issues/3226
