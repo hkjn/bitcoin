@@ -203,7 +203,10 @@ towards PEP8 like https://github.com/bitcoin/bitcoin/pull/10366 seems controvers
 
 Reports in https://github.com/bitcoin/bitcoin/issues/11632 of flakiness of p2p-fullblocktest.py.
 
-It fails consistently for me to/o, but due to OOM in src/prevector.h, not due to timeout.
+It fails consistently for me too, but due to OOM in src/prevector.h, not due to timeout.
+
+More info at:
+https://github.com/bitcoin/bitcoin/issues/11632#issuecomment-367218301
 
 ## Remove need for checkpoints
 
@@ -275,6 +278,10 @@ untracked files show up.. add to .gitignore?
 
 Try out following to use assembly optimizations for ARM:
 ./configure --with-asm=arm --enable-experimental
+
+## Revive PR to support external hd seed
+
+https://github.com/bitcoin/bitcoin/pull/9728
 
 ## Performance dashboard
 
